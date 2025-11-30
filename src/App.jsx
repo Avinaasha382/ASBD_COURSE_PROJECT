@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, 
-  Legend, ResponsiveContainer, PieChart, Pie, Cell, Radar, RadarChart, PolarGrid, 
-  PolarAngleAxis, PolarRadiusAxis, AreaChart, Area, ComposedChart
+  Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area
 } from 'recharts';
 import { 
-  Shield, Map, Activity, FileText, Menu, X, Home, 
-  AlertTriangle, Search, Database, ChevronRight, BrainCircuit,
-  Clock, Filter, Download, Bell, Layers, Cpu, Radio, Calendar, Users
+  Shield, Map, Activity, Menu, AlertTriangle, Search, Database, ChevronRight, BrainCircuit,
+  Clock, Download, Bell
 } from 'lucide-react';
+import "./index.css";
 
 // --- DATA FROM REPORT (APPROXIMATED & STRUCTURED) ---
 
-// 1. Temporal Data (Updated with Arrests for Efficiency Chart)
+// 1. Temporal Data
 const fullTemporalData = [
   { year: '2000', count: 7500, arrests: 2100 }, { year: '2001', count: 7400, arrests: 2050 }, 
   { year: '2002', count: 7300, arrests: 2000 }, { year: '2003', count: 7280, arrests: 1980 },
@@ -47,33 +46,24 @@ const severityData = [
   { name: 'Minor', value: 25561, color: '#10b981' }, // Emerald
 ];
 
-// 4. Radar Data
-const radarData = [
-  { subject: 'Kidnapping', A: 50, fullMark: 350 },
-  { subject: 'Liquor Law', A: 350, fullMark: 350 }, 
-  { subject: 'Assault', A: 300, fullMark: 350 },
-  { subject: 'Arson', A: 80, fullMark: 350 },
-  { subject: 'Homicide', A: 40, fullMark: 350 },
-];
-
-// 5. Hourly Trends (Simulated)
+// 4. Hourly Trends
 const hourlyData = [
   { time: '00:00', incidents: 120 }, { time: '04:00', incidents: 40 },
   { time: '08:00', incidents: 85 }, { time: '12:00', incidents: 150 },
   { time: '16:00', incidents: 190 }, { time: '20:00', incidents: 240 },
 ];
 
-// 6. Monthly Seasonality (Simulated from Histogram Analysis pg 9)
+// 5. Monthly Seasonality
 const monthlyData = [
   { name: 'Jan', count: 580 }, { name: 'Feb', count: 540 },
   { name: 'Mar', count: 600 }, { name: 'Apr', count: 620 },
   { name: 'May', count: 650 }, { name: 'Jun', count: 680 },
-  { name: 'Jul', count: 700 }, { name: 'Aug', count: 710 }, // Peak mentioned in report
-  { name: 'Sep', count: 660 }, { name: 'Oct', count: 690 }, // Peak mentioned in report
+  { name: 'Jul', count: 700 }, { name: 'Aug', count: 710 }, 
+  { name: 'Sep', count: 660 }, { name: 'Oct', count: 690 }, 
   { name: 'Nov', count: 600 }, { name: 'Dec', count: 590 },
 ];
 
-// 7. Association Rules
+// 6. Association Rules
 const associationRules = [
   { id: 1, source: 'Battery', target: 'Assault', conf: '1.00', lift: '1.00' },
   { id: 2, source: 'Narcotics', target: 'Theft', conf: '0.99', lift: '1.00' },
@@ -81,7 +71,7 @@ const associationRules = [
   { id: 4, source: 'Weapons', target: 'Battery', conf: '0.98', lift: '1.01' },
 ];
 
-// 8. Cluster Data
+// 7. Cluster Data
 const clusterData = [
   { id: 1, x: 60, y: 30, label: 'North Side (Theft)', color: '#3b82f6', size: 400 },
   { id: 2, x: 45, y: 45, label: 'West Side (Narcotics)', color: '#ef4444', size: 600 },
@@ -92,7 +82,7 @@ const clusterData = [
   { id: 7, x: 65, y: 85, label: 'Far South (Weapons)', color: '#6366f1', size: 350 },
 ];
 
-// 9. Recent Alerts
+// 8. Recent Alerts
 const recentAlerts = [
   { id: 1, type: 'Battery', loc: 'Cluster 3', time: '10m ago' },
   { id: 2, type: 'Theft', loc: 'Cluster 1', time: '24m ago' },
@@ -100,7 +90,7 @@ const recentAlerts = [
   { id: 4, type: 'Assault', loc: 'Cluster 4', time: '2h ago' },
 ];
 
-// 10. Model Performance Data
+// 9. Model Performance Data
 const modelPerformance = [
   { name: 'Decision Tree', accuracy: 48.72, precision: 0.49, recall: 0.45, f1: 0.47, color: '#3b82f6' },
   { name: 'Naive Bayes', accuracy: 53.54, precision: 0.55, recall: 0.67, f1: 0.61, color: '#8b5cf6' },
@@ -154,7 +144,8 @@ const DashboardView = () => {
   }, [timeFilter]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 w-full">
+    // FIX: Removed animate-in fade-in
+    <div className="space-y-6 w-full">
       {/* Filters & Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -232,7 +223,7 @@ const DashboardView = () => {
         </Card>
       </div>
 
-      {/* Row 2: Heatmap & Seasonality (New Row) */}
+      {/* Row 2: Heatmap & Seasonality */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Hourly Risk Heatmap">
           <div className="h-64 w-full">
@@ -317,7 +308,8 @@ const GeospatialView = () => {
   const [activeCluster, setActiveCluster] = useState(null);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 w-full">
+    // FIX: Removed animate-in fade-in
+    <div className="space-y-6 w-full">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">Geospatial Intelligence</h2>
         <div className="flex gap-2">
@@ -364,7 +356,8 @@ const GeospatialView = () => {
             <div>
               <p className="text-slate-400 text-sm mb-6">Hover over map points for details.</p>
               {activeCluster ? (
-                <div className="bg-slate-700/50 p-5 rounded-lg border border-slate-600 animate-in slide-in-from-right duration-300">
+                // FIX: Removed slide-in animation to prevent visibility issues
+                <div className="bg-slate-700/50 p-5 rounded-lg border border-slate-600">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-4 h-4 rounded-full shadow-sm" style={{ backgroundColor: activeCluster.color }} />
                     <h4 className="font-bold text-white text-lg">{activeCluster.label}</h4>
@@ -427,7 +420,8 @@ const ModelsView = () => {
   const activeModelData = modelPerformance.find(m => m.name === (selectedModel === 'nb' ? 'Naive Bayes' : selectedModel === 'dt' ? 'Decision Tree' : 'SVC'));
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 w-full">
+    // FIX: Removed animate-in fade-in
+    <div className="space-y-6 w-full">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-white">Predictive Modeling & AI</h2>
         <p className="text-slate-400 text-sm">Compare algorithms and run real-time predictions.</p>
@@ -498,7 +492,8 @@ const ModelsView = () => {
             {/* Output */}
             <div className={`flex flex-col justify-center items-center p-6 rounded-xl border-2 border-dashed transition-all duration-500 ${prediction ? 'bg-slate-900/50 border-emerald-500/50' : 'bg-slate-900/20 border-slate-800'}`}>
               {prediction ? (
-                <div className="text-center animate-in zoom-in duration-300">
+                // FIX: Removed animate-in zoom-in
+                <div className="text-center">
                   <div className="text-sm text-slate-400 mb-1">Predicted Crime Type</div>
                   <div className="text-3xl font-bold text-white mb-2">{prediction.type.toUpperCase()}</div>
                   <div className="inline-flex items-center gap-2 bg-slate-800 px-3 py-1 rounded-full text-xs text-slate-300 border border-slate-700">
@@ -539,20 +534,20 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Inject Tailwind CDN dynamically for immediate styling
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://cdn.tailwindcss.com";
-    document.head.appendChild(script);
-  }, []);
-
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) setSidebarOpen(false);
-      else setSidebarOpen(true);
+      // Logic: Close sidebar on mobile, open on desktop
+      if (window.innerWidth < 1024) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
     };
-    window.addEventListener('resize', handleResize);
+    
+    // Call immediately to set initial state correctly
     handleResize();
+    
+    window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -563,37 +558,45 @@ const App = () => {
   ];
 
   return (
-   <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500 selection:text-white flex">      
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500 selection:text-white flex overflow-hidden">      
+      
       {/* Sidebar */}
       <aside
-  className={`
-    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-    lg:translate-x-0
-    fixed lg:static
-    inset-y-0 left-0
-    z-50 w-64
-    bg-slate-900 border-r border-slate-800
-    transform transition-transform duration-300 ease-in-out
-    flex flex-col
-  `}
->
-
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64
+          bg-slate-900 border-r border-slate-800
+          transition-transform duration-300 ease-in-out
+          flex flex-col
+          lg:static lg:translate-x-0
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
         <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-900 shrink-0">
           <Shield className="w-6 h-6 text-blue-500 mr-2" />
           <h1 className="font-bold text-lg text-white tracking-tight">Crime<span className="text-blue-500">Hub</span></h1>
         </div>
+
         <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
-              <button key={item.id} onClick={() => { setActiveTab(item.id); if (window.innerWidth < 1024) setSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === item.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+              <button 
+                key={item.id} 
+                onClick={() => { 
+                  setActiveTab(item.id); 
+                  // Only close sidebar on mobile clicks
+                  if (window.innerWidth < 1024) setSidebarOpen(false); 
+                }} 
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === item.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+              >
                 <Icon className="w-5 h-5" /> {item.label}
               </button>
             );
           })}
         </nav>
+
         <div className="p-4 border-t border-slate-800 bg-slate-900 shrink-0">
-          <div className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-default opacity-50 hover:opacity-100">
+          <div className="flex items-center gap-3 p-2 rounded-lg opacity-50 hover:opacity-100 transition-opacity">
             <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-white">AT</div>
             <div><p className="text-sm font-bold text-slate-300">Analytics Team</p><p className="text-[10px] text-slate-500 uppercase tracking-wide">Chicago Division</p></div>
           </div>
@@ -601,33 +604,51 @@ const App = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="w-full flex-1 flex flex-col min-h-screen relative bg-slate-950 lg:ml-64">
+      <main className="flex-1 flex flex-col h-screen relative bg-slate-950 overflow-hidden">
+        
         <header className="h-16 bg-slate-950/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-6 z-40 shrink-0">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 text-slate-400 hover:text-white"><Menu className="w-6 h-6" /></button>
-          <h2 className="text-xl font-bold text-white hidden md:block tracking-tight">{navItems.find(n => n.id === activeTab)?.label}</h2>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 text-slate-400 hover:text-white">
+            <Menu className="w-6 h-6" />
+          </button>
+          
+          <h2 className="text-xl font-bold text-white hidden md:block tracking-tight">
+            {navItems.find(n => n.id === activeTab)?.label}
+          </h2>
+
           <div className="flex items-center gap-4">
-            <button onClick={() => alert("Simulating Report Download...")} className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded border border-slate-700 transition-all"><Download className="w-3 h-3" /> Export Report</button>
+            <button className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded border border-slate-700 transition-all">
+              <Download className="w-3 h-3" /> Export Report
+            </button>
             <div className="hidden md:flex items-center bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 focus-within:border-blue-500 transition-colors group">
               <Search className="w-4 h-4 text-slate-500 mr-2 group-hover:text-blue-400" />
               <input type="text" placeholder="Search..." className="bg-transparent border-none outline-none text-sm text-white w-32 placeholder-slate-600 focus:w-48 transition-all duration-300" />
             </div>
-            <button className="p-2 text-slate-400 hover:text-white relative group"><div className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full" /><Bell className="w-5 h-5 group-hover:text-blue-400 transition-colors" /></button>
+            <button className="p-2 text-slate-400 hover:text-white relative group">
+              <div className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full" />
+              <Bell className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
+            </button>
           </div>
         </header>
 
         <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-          <div className="w-full pb-8">
+          <div className="w-full pb-8 max-w-7xl mx-auto">
             {activeTab === 'dashboard' && <DashboardView />}
             {activeTab === 'geo' && <GeospatialView />}
             {activeTab === 'models' && <ModelsView />}
           </div>
+          
           <footer className="mt-8 text-center text-xs text-slate-600 border-t border-slate-800 pt-6">
             <p>© 2025 Chicago Crime Analysis Project • Powered by React & PySpark Analysis</p>
-            <p className="mt-1 text-slate-700">Data based on internal report "ADS_REPORT (3).pdf"</p>
           </footer>
         </div>
         
-        {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />}
+        {/* Mobile Overlay */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" 
+            onClick={() => setSidebarOpen(false)} 
+          />
+        )}
       </main>
     </div>
   );
